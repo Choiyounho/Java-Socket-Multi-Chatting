@@ -1,3 +1,5 @@
+package chat;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -8,7 +10,7 @@ public class Server {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(9999);
-            System.out.println("Server ready ...");
+            System.out.println("chat.Server ready ...");
 
         } catch (IOException e) {
             System.out.println("IOException e " + e.getMessage());
@@ -26,7 +28,7 @@ public class Server {
 
                     OutputStream outputStream = socket.getOutputStream();
                     DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
-                    dataOutputStream.writeUTF("[ECHO]" + message + "(from Server!)");
+                    dataOutputStream.writeUTF("[ECHO]" + message + "(from chat.Server!)");
 
                     dataOutputStream.close();
                     dataInputStream.close();
