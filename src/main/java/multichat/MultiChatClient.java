@@ -36,6 +36,7 @@ public class MultiChatClient {
                     if (message.equals("quit")) break;
                     dataOutputStream.writeUTF("[" + name + "]" + message);
                 }
+                assert dataOutputStream != null;
                 dataOutputStream.close();
                 socket.close();
             } catch (Exception e) {
@@ -65,14 +66,17 @@ public class MultiChatClient {
                 } catch (Exception e) {
                     e.printStackTrace();
                     break;
+                } finally {
+                    try {
+                        dataInputStream.close();
+                        socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            try {
-                dataInputStream.close();
-                socket.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
         }
     }
+
 }

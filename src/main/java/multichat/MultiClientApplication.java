@@ -24,4 +24,5 @@ public class MultiClientApplication {
             System.out.println("Exception e " + e.getMessage());
         }
     }
+
 }
