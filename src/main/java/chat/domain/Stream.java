@@ -5,7 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class IOApi {
+public class Stream {
 
     public static DataOutputStream newInstance4DataOutputStream(Socket socket) throws IOException {
         return new DataOutputStream(socket.getOutputStream());

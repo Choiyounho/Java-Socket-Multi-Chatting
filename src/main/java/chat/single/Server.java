@@ -1,6 +1,6 @@
 package chat.single;
 
-import chat.domain.IOApi;
+import chat.domain.Stream;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -9,13 +9,13 @@ import java.net.Socket;
 import static utils.CommonsConstant.PORT;
 
 public class Server {
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         ServerSocket serverSocket = null;
+
         try {
             serverSocket = new ServerSocket(PORT);
             System.out.println("chat.Server ready ...");
-
         } catch (IOException e) {
             System.out.println("IOException e " + e.getMessage());
         }
@@ -26,15 +26,14 @@ public class Server {
                     Socket socket = serverSocket.accept(); // 클라이언트 정보를 알고 있는 소켓
                     System.out.println("client connect success!");
 
-                    DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+                    DataInputStream dataInputStream = Stream.newInstance4DataInputStream(socket);
                     String message = dataInputStream.readUTF();
 
-                    DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+                    DataOutputStream dataOutputStream = Stream.newInstance4DataOutputStream(socket);
                     dataOutputStream.writeUTF("[ECHO]" + message + "(from chat.Server!)");
 
-                    IOApi.closeIOStream(socket, dataInputStream, dataOutputStream);
+                    Stream.closeIOStream(socket, dataInputStream, dataOutputStream);
                     System.out.println("client Socket close...");
-
                 } catch (IOException e) {
                     System.out.println("IOException e " + e.getMessage());
                 }
@@ -44,6 +43,5 @@ public class Server {
             }
         }
     }
-
 
 }
