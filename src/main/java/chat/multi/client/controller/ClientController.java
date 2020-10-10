@@ -2,25 +2,21 @@ package chat.multi.client.controller;
 
 import chat.multi.client.ClientReceiver;
 import chat.multi.client.ClientSender;
+import chat.view.ChatView;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Scanner;
 
 import static utils.CommonsConstant.LOCAL_HOST;
 import static utils.CommonsConstant.PORT;
 
 public class ClientController {
 
-    private static final String MY_NAME = "이름 설정 : ";
-
     public void run() {
         try {
             Socket socket = new Socket(LOCAL_HOST, PORT);
-            Scanner scanner = new Scanner(System.in);
-            System.out.print(MY_NAME);
-            String name = scanner.nextLine();
+            String name = ChatView.inputName();
 
             Thread sender = new Thread(new ClientSender(socket, name));
             Thread receiver = new Thread(new ClientReceiver(socket));

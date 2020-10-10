@@ -1,6 +1,7 @@
 package chat.multi.client;
 
-import chat.domain.IOApi;
+import chat.domain.Stream;
+import chat.view.ChatView;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -11,23 +12,18 @@ public class ClientReceiver extends Thread {
     private Socket socket;
     private DataInputStream dataInputStream;
 
-    public ClientReceiver(Socket socket) {
+    public ClientReceiver(Socket socket) throws IOException {
         this.socket = socket;
-        try {
-            dataInputStream = IOApi.newInstance4DataInputStream(socket);
-        } catch (Exception e) {
-            System.out.println("Exception e " + e.getMessage()
-            );
-        }
+        dataInputStream = Stream.newInstance4DataInputStream(socket);
     }
 
     @Override
     public void run() {
         while (dataInputStream != null) {
             try {
-                System.out.println(receiveMessage());
+                System.out.println(ChatView.getMessage(dataInputStream));
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Exception e " + e.getMessage());
                 break;
             }
         }
@@ -35,12 +31,8 @@ public class ClientReceiver extends Thread {
             dataInputStream.close();
             socket.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Exception e " + e.getMessage());
         }
-    }
-
-    private String receiveMessage() throws IOException {
-        return dataInputStream.readUTF();
     }
 
 }
