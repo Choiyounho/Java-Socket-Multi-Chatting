@@ -21,7 +21,7 @@ public class ClientReceiver extends Thread {
     public void run() {
         while (dataInputStream != null) {
             try {
-                System.out.println(ChatView.getMessage(dataInputStream));
+                ChatView.printMessage(dataInputStream);
             } catch (Exception e) {
                 System.out.println("Exception e " + e.getMessage());
                 break;

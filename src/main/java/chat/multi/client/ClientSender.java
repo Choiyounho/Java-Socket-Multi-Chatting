@@ -9,6 +9,9 @@ import java.net.Socket;
 
 public class ClientSender extends Thread {
 
+    public static final String EXIT_MESSAGE = "quit";
+    private static final String MESSAGE = "[%s]%s";
+
     private Socket socket;
     private DataOutputStream dataOutputStream;
     private String name;
@@ -21,22 +24,34 @@ public class ClientSender extends Thread {
 
     public void run() {
         try {
-            if (dataOutputStream != null) {
-                dataOutputStream.writeUTF(name);
-            }
-            while (dataOutputStream != null) {
-                String message = ChatView.inputChatting();
-                if (message.equals("quit")) {
-                    break;
-                }
-                dataOutputStream.writeUTF("[" + name + "]" + message);
-            }
-            if (dataOutputStream != null) {
-                dataOutputStream.close();
-                socket.close();
-            }
+            sendName();
+            sendMessage();
+            closeStream();
         } catch (Exception e) {
             System.out.println("Exception e " + e.getMessage());
+        }
+    }
+
+    private void sendName() throws IOException {
+        if (dataOutputStream != null) {
+            dataOutputStream.writeUTF(name);
+        }
+    }
+
+    private void sendMessage() throws IOException {
+        while (dataOutputStream != null) {
+            String message = ChatView.inputChatting();
+            if (message.equalsIgnoreCase(EXIT_MESSAGE)) {
+                break;
+            }
+            dataOutputStream.writeUTF(String.format(MESSAGE, name, message));
+        }
+    }
+
+    private void closeStream() throws IOException {
+        if (dataOutputStream != null) {
+            dataOutputStream.close();
+            socket.close();
         }
     }
 

@@ -7,9 +7,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class ServerReceiver extends Thread {
 
@@ -20,12 +18,28 @@ public class ServerReceiver extends Thread {
     private DataOutputStream dataOutputStream;
     private Map<String, DataOutputStream> clients;
 
-    public ServerReceiver(Socket socket, Map<String, DataOutputStream> clients) throws IOException {
+    private ServerReceiver(Socket socket, Map<String, DataOutputStream> clients) throws IOException {
         this.socket = socket;
         dataInputStream = Stream.newInstance4DataInputStream(socket);
         dataOutputStream = Stream.newInstance4DataOutputStream(socket);
         this.clients = clients;
+    }
+
+    private ServerReceiver() {
+        this.clients = new HashMap<>();
         Collections.synchronizedMap(clients);
+    }
+
+    public static ServerReceiver initClients() {
+        return new ServerReceiver();
+    }
+
+    public static ServerReceiver initThread(Socket socket, Map<String, DataOutputStream> clients) throws IOException {
+        return new ServerReceiver(socket, clients);
+    }
+
+    public Map<String, DataOutputStream> getClients() {
+        return clients;
     }
 
     public void run() {
@@ -34,7 +48,7 @@ public class ServerReceiver extends Thread {
             name = ChatView.getMessage(dataInputStream);
             noticeExistUser(name);
             validateName(name, this.clients);
-            sendChtting();
+            sendChatting();
         } catch (IOException e) {
             System.out.println("IOException e " + e.getMessage());
         } catch (Exception e) {
@@ -51,7 +65,7 @@ public class ServerReceiver extends Thread {
         }
     }
 
-    private void sendChtting() throws IOException {
+    private void sendChatting() throws IOException {
         while (dataInputStream != null) {
             sendToAll(ChatView.getMessage(dataInputStream));
         }
@@ -89,5 +103,19 @@ public class ServerReceiver extends Thread {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ServerReceiver that = (ServerReceiver) o;
+        return Objects.equals(clients, that.clients);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clients);
+    }
+
 }
+
 

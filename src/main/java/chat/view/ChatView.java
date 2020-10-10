@@ -1,9 +1,9 @@
 package chat.view;
 
 import java.io.DataInput;
+import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Scanner;
 
 public class ChatView {
@@ -27,9 +27,12 @@ public class ChatView {
         dataOutputStream.writeUTF(message);
     }
 
-    // TODO : Client 에서 사용
     public static String getMessage(DataInput dataInputStream) throws IOException {
         return dataInputStream.readUTF();
+    }
+
+    public static void printMessage(DataInputStream dataInputStream) throws IOException {
+        System.out.println(dataInputStream.readUTF());
     }
 
 }
