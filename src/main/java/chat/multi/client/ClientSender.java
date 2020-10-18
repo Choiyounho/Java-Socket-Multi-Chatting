@@ -1,6 +1,8 @@
 package chat.multi.client;
 
+import chat.domain.Message;
 import chat.domain.Stream;
+import chat.domain.User;
 import chat.view.ChatView;
 
 import java.io.DataOutputStream;
@@ -12,13 +14,13 @@ public class ClientSender extends Thread {
     public static final String EXIT_MESSAGE = "quit";
     private static final String MESSAGE = "[%s]%s";
 
-    private Socket socket;
+    private final Socket socket;
     private DataOutputStream dataOutputStream;
-    private String name;
+    private final User user;
 
-    public ClientSender(Socket socket, String name) throws IOException {
+    public ClientSender(Socket socket, User user) throws IOException {
         this.socket = socket;
-        this.name = name;
+        this.user = user;
         dataOutputStream = Stream.newInstance4DataOutputStream(socket);
     }
 
@@ -34,17 +36,17 @@ public class ClientSender extends Thread {
 
     private void sendName() throws IOException {
         if (dataOutputStream != null) {
-            dataOutputStream.writeUTF(name);
+            dataOutputStream.writeUTF(user.getName());
         }
     }
 
     private void sendMessage() throws IOException {
         while (dataOutputStream != null) {
-            String message = ChatView.inputChatting();
-            if (message.equalsIgnoreCase(EXIT_MESSAGE)) {
+            String description = ChatView.inputChatting();
+            if (description.equalsIgnoreCase(EXIT_MESSAGE)) {
                 break;
             }
-            dataOutputStream.writeUTF(String.format(MESSAGE, name, message));
+            dataOutputStream.writeUTF(String.format(MESSAGE, user.getName(), description));
         }
     }
 

@@ -1,5 +1,7 @@
 package chat.multi.client.controller;
 
+import chat.domain.Message;
+import chat.domain.User;
 import chat.multi.client.ClientReceiver;
 import chat.multi.client.ClientSender;
 import chat.view.ChatView;
@@ -16,9 +18,9 @@ public class ClientController {
     public void run() {
         try {
             Socket socket = new Socket(LOCAL_HOST, PORT);
-            String name = ChatView.inputName();
+            User user = new User(ChatView.inputName());
 
-            Thread sender = new Thread(new ClientSender(socket, name));
+            Thread sender = new Thread(new ClientSender(socket, user));
             Thread receiver = new Thread(new ClientReceiver(socket));
 
             sender.start();

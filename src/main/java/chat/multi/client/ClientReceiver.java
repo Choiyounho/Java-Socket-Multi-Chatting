@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class ClientReceiver extends Thread {
 
-    private Socket socket;
+    private final Socket socket;
     private DataInputStream dataInputStream;
 
     public ClientReceiver(Socket socket) throws IOException {

@@ -1,6 +1,7 @@
 package chat.multi.server;
 
 import chat.domain.Stream;
+import chat.domain.User;
 import chat.view.ChatView;
 
 import java.io.DataInputStream;
@@ -13,6 +14,7 @@ public class ServerReceiver extends Thread {
 
     public static final String PRINT_JOINED_USER = "[%s]님께서 채팅방에 입장했습니다!!";
     public static final String PRINT_OUT_USER = "[%s]님께서 채팅방에서 나갔습니다!!";
+
     private Socket socket;
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
@@ -43,18 +45,18 @@ public class ServerReceiver extends Thread {
     }
 
     public void run() {
-        String name = null;
+        User user = null;
         try {
-            name = ChatView.getMessage(dataInputStream);
-            noticeExistUser(name);
-            validateName(name, this.clients);
+            user = new User(ChatView.getMessage(dataInputStream));
+            noticeExistUser(user.getName());
+            validateName(user.getName(), this.clients);
             sendChatting();
         } catch (IOException e) {
             System.out.println("IOException e " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Exception e " + e.getMessage());
         } finally {
-            goOutToChatting(name);
+            goOutToChatting(user.getName());
         }
     }
 
@@ -89,7 +91,7 @@ public class ServerReceiver extends Thread {
         throw new IllegalArgumentException(String.format("#Aleady exist %s", name));
     }
 
-    public void sendToAll(String message) { //브로드 캐스팅 기능
+    public void sendToAll(String message) {
         Iterator<String> iterator = clients.keySet().iterator();
         while (iterator.hasNext()) {
             try {
