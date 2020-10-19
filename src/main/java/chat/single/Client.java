@@ -1,6 +1,6 @@
 package chat.single;
 
-import chat.domain.Stream;
+import utils.StreamUtils;
 import chat.view.ChatView;
 
 import java.io.DataInputStream;
@@ -21,15 +21,15 @@ public class Client {
             while (true) {
                 String message = ChatView.inputChatting();
 
-                DataOutputStream messageOutputStream = Stream.newInstance4DataOutputStream(socket);
+                DataOutputStream messageOutputStream = StreamUtils.newInstance4DataOutputStream(socket);
                 ChatView.sendMessage(message, messageOutputStream);
 
-                DataInputStream messageInputStream = Stream.newInstance4DataInputStream(socket);
+                DataInputStream messageInputStream = StreamUtils.newInstance4DataInputStream(socket);
 
                 System.out.println("Receive : " + ChatView.getMessage(messageInputStream));
 //                ChatView.getMessage(messageInputStream);
 
-                Stream.closeIOStream(socket, messageInputStream, messageOutputStream);
+                StreamUtils.closeIOStream(socket, messageInputStream, messageOutputStream);
             }
         } catch (IOException e) {
             System.out.println("IOException e " + e.getMessage());

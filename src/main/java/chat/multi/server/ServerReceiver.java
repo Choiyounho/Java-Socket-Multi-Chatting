@@ -1,6 +1,6 @@
 package chat.multi.server;
 
-import chat.domain.Stream;
+import utils.StreamUtils;
 import chat.domain.User;
 import chat.view.ChatView;
 
@@ -22,8 +22,8 @@ public class ServerReceiver extends Thread {
 
     private ServerReceiver(Socket socket, Map<String, DataOutputStream> clients) throws IOException {
         this.socket = socket;
-        dataInputStream = Stream.newInstance4DataInputStream(socket);
-        dataOutputStream = Stream.newInstance4DataOutputStream(socket);
+        dataInputStream = StreamUtils.newInstance4DataInputStream(socket);
+        dataOutputStream = StreamUtils.newInstance4DataOutputStream(socket);
         this.clients = clients;
     }
 
@@ -77,7 +77,7 @@ public class ServerReceiver extends Thread {
         if (clients.containsKey(name)) { // 같은 이름 사용자 존재
             ChatView.sendMessage("#Aleady exist name : " + name, dataOutputStream);
             ChatView.sendMessage("#Please reconnect by other name", dataOutputStream);
-            Stream.closeIOStream(socket, dataInputStream, dataOutputStream);
+            StreamUtils.closeIOStream(socket, dataInputStream, dataOutputStream);
             socket = null;
         }
     }

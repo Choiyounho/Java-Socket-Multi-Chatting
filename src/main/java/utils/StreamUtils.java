@@ -1,11 +1,11 @@
-package chat.domain;
+package utils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Stream {
+public class StreamUtils {
 
     public static DataOutputStream newInstance4DataOutputStream(Socket socket) throws IOException {
         return new DataOutputStream(socket.getOutputStream());

@@ -1,6 +1,5 @@
 package chat.multi.client.controller;
 
-import chat.domain.Message;
 import chat.domain.User;
 import chat.multi.client.ClientReceiver;
 import chat.multi.client.ClientSender;

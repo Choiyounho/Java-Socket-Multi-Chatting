@@ -1,6 +1,6 @@
 package chat.multi.client;
 
-import chat.domain.Stream;
+import utils.StreamUtils;
 import chat.view.ChatView;
 
 import java.io.DataInputStream;
@@ -14,7 +14,7 @@ public class ClientReceiver extends Thread {
 
     public ClientReceiver(Socket socket) throws IOException {
         this.socket = socket;
-        dataInputStream = Stream.newInstance4DataInputStream(socket);
+        dataInputStream = StreamUtils.newInstance4DataInputStream(socket);
     }
 
     @Override

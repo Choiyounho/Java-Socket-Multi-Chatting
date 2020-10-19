@@ -1,7 +1,6 @@
 package chat.multi.client;
 
-import chat.domain.Message;
-import chat.domain.Stream;
+import utils.StreamUtils;
 import chat.domain.User;
 import chat.view.ChatView;
 
@@ -21,7 +20,7 @@ public class ClientSender extends Thread {
     public ClientSender(Socket socket, User user) throws IOException {
         this.socket = socket;
         this.user = user;
-        dataOutputStream = Stream.newInstance4DataOutputStream(socket);
+        dataOutputStream = StreamUtils.newInstance4DataOutputStream(socket);
     }
 
     public void run() {
